@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎬 Sentiment Review Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Movie Analyzer</h1>
+
+    <form action="/predict" method="post">
+        <textarea name="text" rows="4" placeholder="Paste a movie review here..."></textarea>
+        <br>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if result %}
+        <div class="result">
+            Result: <strong>{{ result }}</strong>
+        </div>
+    {% endif %}
+</body>
+</html>
