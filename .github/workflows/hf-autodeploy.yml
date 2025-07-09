@@ -1,62 +1,28 @@
-name: AutoTrain-and-Deploy
+name: Push-to-HF-Space
 
 on:
   push:
     branches: [main]
 
 jobs:
-  check-diff-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🔁 Checkout Repo
+      - name: 🔁 Checkout repo
         uses: actions/checkout@v3
 
-      - name: 🐍 Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: 🔍 Detect Changes in Dataset or Model_Training.py
-        id: check_changes
-        run: |
-          git fetch origin main
-
-          if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            FILES_CHANGED=$(git diff --name-only HEAD^ HEAD)
-          else
-            FILES_CHANGED=$(git diff --name-only HEAD)
-          fi
-
-          echo "🧾 Changed files:"
-          echo "$FILES_CHANGED"
-
-          echo "$FILES_CHANGED" | grep -qE 'dataset/|Model_Training.py' \
-            && echo "model_changed=true" >> $GITHUB_ENV \
-            || echo "model_changed=false" >> $GITHUB_ENV
-
-      - name: 📦 Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: 🤖 Train Model (only if needed)
-        if: env.model_changed == 'true'
-        run: python Model_Training.py
-
-      - name: 🚀 Push Everything to Hugging Face
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: 🧪 Setup Git
         run: |
           git config --global user.email "ponkamrakesh@gmail.com"
           git config --global user.name "ponkamrakesh"
+
+      - name: 🚀 Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
           git remote set-url origin https://huggingface_hub:${HF_TOKEN}@huggingface.co/spaces/RakeshPonkam07/Movie_Review_Sentiment
-
           git pull origin main --rebase
-
           git add .
-          git status
-
-          # Only commit if there are changes
-          git diff --cached --quiet || git commit -m "🚀 AutoDeploy: retrain or interface update"
+          git commit -m "🤖 Auto update via GitHub Actions" || echo "No changes to commit"
           git push origin main
