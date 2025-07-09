@@ -7,7 +7,7 @@ from tensorflow.keras.layers import Embedding, GRU, Dense
 from sklearn.model_selection import train_test_split
 
 # 🔹 Load dataset
-IMDB_Df = pd.read_csv("C:\\Rakesh_DataScience\\pythonproject\\Movie_Review\\dataset\\IMDB Dataset.csv")
+IMDB_Df = pd.read_csv("https://github.com/ponkamrakesh/Movie_Review/blob/main/dataset/IMDB%20Dataset.csv")
 
 print(IMDB_Df.head())
 print("Null Values count --> ", IMDB_Df.isnull().sum())
