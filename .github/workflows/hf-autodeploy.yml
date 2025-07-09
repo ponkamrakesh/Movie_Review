@@ -18,11 +18,11 @@ jobs:
           python-version: '3.10'
 
       - name: 🔍 Detect Changes in Dataset or Model
-        id: check-changes
+        id: changes
         run: |
           git fetch origin main
 
-          # Get changed files
+          # Handle first commit gracefully
           if [ $(git rev-list --count HEAD) -gt 1 ]; then
             FILES_CHANGED=$(git diff --name-only HEAD^ HEAD)
           else
@@ -41,21 +41,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🤖 Run Model Training if Needed
+      - name: 🤖 Run Model Training (if dataset or model changed)
         if: env.model_changed == 'true'
         run: python Model_Training.py
 
-      - name: 🚀 Push Changes to Hugging Face
+      - name: 🚀 Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "ponkamrakesh@gmail.com"
           git config --global user.name "ponkamrakesh"
-
-          # Update remote with tokenized URL
           git remote set-url origin https://huggingface_hub:${HF_TOKEN}@huggingface.co/spaces/RakeshPonkam07/Movie_Review_Sentiment
 
+          git pull origin main --rebase
+          
           git add .
-
           git diff --cached --quiet || git commit -m "🔄 Auto-deploy: update after changes"
           git push origin main
