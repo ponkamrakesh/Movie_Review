@@ -10,13 +10,13 @@ import os
 
 app = FastAPI()
 
-# Load saved model and tokenizer
-model_dir = "https://github.com/ponkamrakesh/Movie_Review/tree/main/model"
-model = load_model(os.path.join(model_dir, "sentiment_gru_model.h5"))
+model_dir = "model"
+model_path = os.path.join(model_dir, "sentiment_gru_model.h5")
+
+model = load_model(model_path)
 
 with open(os.path.join(model_dir, "tokenizer.pkl"), "rb") as f:
     tokenizer = pickle.load(f)
-
 max_len = 50  # same as used during training
 
 templates = Jinja2Templates(directory="templates")
