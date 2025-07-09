@@ -73,22 +73,23 @@ print(f"🚀 Sentiment: {sentiment} → Probabilities: {confidence}")
 
 
 import os
+import pickle
 
-# 🔹 Define the path to save the model
-model_dir = "C:\\Rakesh_DataScience\\pythonproject\\Movie_Review\\model"
+# 🔹 Relative path inside your GitHub repo (e.g., model/)
+model_dir = "model"
 
 # 🔹 Create the directory if it doesn't exist
 os.makedirs(model_dir, exist_ok=True)
 
-# 🔹 Define the full file path
+# 🔹 Define file paths
 model_path = os.path.join(model_dir, "sentiment_gru_model.h5")
+tokenizer_path = os.path.join(model_dir, "tokenizer.pkl")
 
-# 🔹 Save the model
+# 🔹 Save model
 model.save(model_path)
 
-import pickle
-
-with open(os.path.join(model_dir, "tokenizer.pkl"), "wb") as f:
+# 🔹 Save tokenizer
+with open(tokenizer_path, "wb") as f:
     pickle.dump(tokenizer, f)
 
-print("✅ Tokenizer saved.")
+print("✅ Model and Tokenizer saved to GitHub folder.")
